@@ -96,22 +96,14 @@ ratings = ratings.apply(lambda x: x-x.mean(), axis = 1).round(5)
 
 
 #Context Break-down to "Decouple" Data for age
-Ratings_1= ratings.loc[list(users[users['age_1'] >0].T.columns.values)]
-Ratings_2= ratings.loc[list(users[users['age_18'] >0].T.columns.values)]
-Ratings_3= ratings.loc[list(users[users['age_25'] >0].T.columns.values)]
-Ratings_4= ratings.loc[list(users[users['age_35'] >0].T.columns.values)]
-Ratings_5= ratings.loc[list(users[users['age_45'] >0].T.columns.values)]
-Ratings_6= ratings.loc[list(users[users['age_50'] >0].T.columns.values)]
-Ratings_7= ratings.loc[list(users[users['age_56'] >0].T.columns.values)]
-
+def subset_users(ratings,users,col):
+    Rating= ratings.loc[list(users[users[col] >0].T.columns.values)]
+    return Rating
+    
 #Context Break_down by Genre(NOT A COMPLETE LIST)
-genre_1= ratings[list(movies[movies['genre_Action'] >0].T.columns.values)]
-genre_2= ratings[list(movies[movies["genre_Children's"] >0].T.columns.values)]
-genre_3= ratings[list(movies[movies['genre_Comedy'] >0].T.columns.values)]
-genre_4= ratings[list(movies[movies['genre_Drama'] >0].T.columns.values)]
-genre_5= ratings[list(movies[movies['genre_Horror'] >0].T.columns.values)]
-genre_6= ratings[list(movies[movies['genre_Romance'] >0].T.columns.values)]
-genre_7= ratings[list(movies[movies['genre_Sci-Fi'] >0].T.columns.values)]
+def subset_movies(ratings, movies,col):
+    Rating = ratings[list(movies[movies[col] >0].T.columns.values)]
+    return Rating
 
 #SVD Function we are using (time efficient)
 def svd_red(movies,n):
@@ -132,6 +124,25 @@ def svd_red(movies,n):
 
 
 #Final Variable
+
+Ratings_1 = subset_users(ratings,users,'age_1')
+Ratings_2 = subset_users(ratings,users,'age_18')
+Ratings_3 = subset_users(ratings,users,'age_25')
+Ratings_4 = subset_users(ratings,users,'age_35')
+Ratings_5 = subset_users(ratings,users,'age_45')
+Ratings_6 = subset_users(ratings,users,'age_50')
+Ratings_7 = subset_users(ratings,users,'age_56')
+
+
+genre_1 = movies(ratings, movies,'genre_Action')
+genre_2 = movies(ratings, movies,"genre_Children's")
+genre_3 = movies(ratings, movies,'genre_Comedy')
+genre_4 = movies(ratings, movies,'genre_Drama')
+genre_5 = movies(ratings, movies,'genre_Horror')
+genre_6 = movies(ratings, movies,'genre_Romance')
+genre_7 = movies(ratings, movies,'genre_Sci-Fi')
+
+
 Total = svd_red(ratings, 50)
 rate_1 = svd_red(Ratings_1, 50)
 rate_2 = svd_red(Ratings_2, 50)
@@ -151,9 +162,12 @@ g_rate_6 = svd_red(genre_6, 50)
 g_rate_7 = svd_red(genre_7, 50)
 
 
-
+np.save
 np.savetxt("ratings.csv", ratings, fmt='%1.3f', delimiter=",")
 np.savetxt("Total.csv", Total, fmt='%1.3f', delimiter=",")
+np.savetxt("movies.csv", movies, fmt='%1.3f', delimiter=",")
+np.savetxt("users.csv", users, fmt='%1.3f', delimiter=",")
+
 
 np.savetxt("g_rate_1.csv", g_rate_1, fmt='%1.3f', delimiter=",")
 np.savetxt("g_rate_2.csv", g_rate_2, fmt='%1.3f', delimiter=",")
